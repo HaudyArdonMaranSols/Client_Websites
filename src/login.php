@@ -12,7 +12,7 @@
     </header>
 
     <main class="bg-white flex flex-wrap md:flex-nowrap">
-        <div class="bg-[url('Assets/BannerKazumi.png')] bg-cover bg-center w-full md:w-[70%] flex items-center justify-center h-[300px] md:h-auto">
+        <div class="bg-[url('../Assets/BannerKazumi.png')] bg-cover bg-center w-full md:w-[70%] flex items-center justify-center h-[300px] md:h-auto">
         </div>
 
         <div class="bg-blue-50 w-full md:w-[30%] flex flex-col items-center justify-center p-6">
@@ -50,9 +50,6 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-[url('Assets/Footer.png')] bg-cover bg-center h-[300px] flex items-center justify-center space-x-20">
-        <img src="Assets/shoope-removebg-preview.png" alt="Shopee Logo" class="h-20">
-        <img src="Assets/tokped-removebg-preview.png" alt="Tokopedia Logo" class="h-20">
-    </footer>
+    <?php require "footer.php"; ?>
 </body>
 </html>
