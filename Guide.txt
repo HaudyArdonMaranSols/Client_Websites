@@ -1,0 +1,5 @@
+npm install -D tailwindcss
+
+npx tailwindcss init
+
+npx tailwindcss -i ./tail.css -o ./tailwind.css --watch (Run In Terminal)
