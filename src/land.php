@@ -20,7 +20,7 @@
 </head>
 <body>
     <header class="bg-blue-500 text-orange-500 text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
-        STOK TO
+        STOK GUDANG
     </header>
 
     <main class="flex">
@@ -53,47 +53,33 @@
                 <table class="w-full border-collapse">
                     <thead class="bg-blue-500 text-white">
                         <tr>
+                            <th class="p-2 text-left">Produk ID</th>
                             <th class="p-2 text-left">Nama Produk</th>
-                            <th class="p-2 text-left">Stok</th>
                             <th class="p-2 text-left">Harga</th>
+                            <th class="p-2 text-left">Stok</th>
+                            <th class="p-2 text-left">Kategori</th>
                             <th class="p-2">Opsi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b">
-                            <td class="p-2">
-                                <div class="font-bold">main query kategori barang disini</div>
-                                <ul class="ml-4 list-disc">
-                                    <li>main query barang disini</li>
-                                </ul>
-                            </td>
-                            <td class="p-2">
-                                <ul>
-                                    <li>query</li>
-                                </ul>
-                            </td>
-                            <td class="p-2">
-                                <ul>
-                                    <li>query</li>
-                                </ul>
-                            </td>
-                            <td class="p-2 text-blue-500">
-                                <a href="#" class="underline">Ubah</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-2">
-                                <div class="font-bold">query kategori barang</div>
-                                <ul class="ml-4 list-disc">
-                                    <li>query barang</li>
-                                </ul>
-                            </td>
-                            <td class="p-2">query</td>
-                            <td class="p-2">query</td>
-                            <td class="p-2 text-blue-500">
-                                <a href="#" class="underline">Ubah</a>
-                            </td>
-                        </tr>
+                        <?php
+                            require "fetch.php"; // PHP untuk Membaca Data dari Database
+
+                            if ($result->num_rows > 0):
+                                while ($row = $result->fetch_assoc()): ?>
+                                    <tr class="border-b">
+                                        <td class="p-2"><?= $row['produk_id']; ?></td>
+                                        <td class="p-2"><?= $row['nama_produk']; ?></td>
+                                        <td class="p-2"><?= number_format($row['harga'], 2); ?></td>
+                                        <td class="p-2"><?= $row['stok']; ?></td>
+                                        <td class="p-2"><?= $row['nama_kategori']; ?></td>
+                                    </tr>
+                                <?php endwhile;
+                            else: ?>
+                                <tr>
+                                    <td colspan="5" class="text-center p-2">Tidak ada data tersedia</td>
+                                </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -137,7 +123,6 @@
             </form>
         </div>
     </div>
-
 
     <?php require "footer.php" ?>
 </body>
