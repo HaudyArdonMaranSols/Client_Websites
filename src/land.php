@@ -73,6 +73,8 @@
                                         <td class="p-2"><?= number_format($row['harga'], 2); ?></td>
                                         <td class="p-2"><?= $row['stok']; ?></td>
                                         <td class="p-2"><?= $row['nama_kategori']; ?></td>
+                                        <td class="p-2">
+                                            <a href="stockview.php?produk_id=<?= $row['produk_id']; ?>" class="bg-blue-500 text-white px-4 py-2 rounded">Lihat Stok</a>
                                     </tr>
                                 <?php endwhile;
                             else: ?>

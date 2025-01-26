@@ -1,4 +1,9 @@
-<?php "koneksi.php"; ?>
+<?php 
+require "koneksi.php";
+// Ambil produk_id dari URL
+$produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +27,23 @@
                 
             </div>
             <div class="text-center mb-6">
-                // Kode untuk Menampilkan Nama Barang Disini
+                <?php require "koneksi.php";
+                    if ($produk_id) {
+                        // Query untuk mengambil data produk berdasarkan produk_id
+                        $query = "SELECT nama_produk FROM produk WHERE produk_id = ?";
+                        $stmt = $con->prepare($query);
+                        $stmt->bind_param('i', $produk_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                    
+                        if ($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            echo "<h2 class='text-center mb-6'>Stok Barang: " . $row['nama_produk'] . "</h2>";
+                        } else {
+                            echo "<p>Produk tidak ditemukan.</p>";
+                        }
+                    }
+                ?>
             </div>
             
 
@@ -41,28 +62,33 @@
                 <table class="w-full border-collapse">
                     <thead class="bg-blue-500 text-white">
                         <tr>
-                            <th class="p-2 text-left">Stok Gudang</th>
+                            <th class="p-2 text-left">Stok Gudang Aktif</th>
                             <th class="p-2 text-left">Stok Masuk</th>
                             <th class="p-2 text-left">Stok Keluar</th>
+                            <th class="p-2 text-left">Tanggal</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php require "koneksi.php";
                         $query = "
-                            SELECT p.nama_produk, p.stok, l.perubahan, l.keterangan, l.tanggal 
+                            SELECT p.nama_produk, p.stok, l.jumlah, l.jenis, l.tanggal 
                             FROM stok_log l
                             JOIN produk p ON l.produk_id = p.produk_id
-                            ORDER BY l.tanggal DESC
+                            WHERE p.produk_id = ?
+                            ORDER BY l.tanggal ASC
                         ";
-
-                        $result = $con->query($query);
+                        
+                        $stmt = $con->prepare($query);
+                        $stmt->bind_param('i', $produk_id);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
 
                         if ($result && $result->num_rows > 0):
                             while ($row = $result->fetch_assoc()): ?>
                                 <tr class="border-b">
                                     <td class="p-2"><?= $row['stok']; ?></td>
-                                    <td class="p-2"><?= $row['perubahan'] > 0 ? $row['perubahan'] : '-'; ?></td>
-                                    <td class="p-2"><?= $row['perubahan'] < 0 ? abs($row['perubahan']) : '-'; ?></td>
+                                    <td class="p-2"><?= $row['jenis'] === 'masuk' ? $row['jumlah'] : '-'; ?></td>
+                                    <td class="p-2"><?= $row['jenis'] === 'keluar' ? $row['jumlah'] : '-'; ?></td>
                                     <td class="p-2"><?= date("d M Y, H:i", strtotime($row['tanggal'])); ?></td>
                                 </tr>
                             <?php endwhile;
