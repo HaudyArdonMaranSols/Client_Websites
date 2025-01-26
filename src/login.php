@@ -1,4 +1,7 @@
-<?php require "koneksi.php";?>
+<?php
+    session_start();
+    require "koneksi.php";
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,7 @@
 </head>
 
 <body class="bg-SideLightBlue font-sans">
-    <header class="bg-blue-500 text-orange-500 text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
+    <header class="bg-blue-500 text-white text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
         WELCOME TO
     </header>
 

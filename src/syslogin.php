@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Cek apakah data email atau username dan password ada
     if (empty($email_or_username) || empty($password)) {
-        error_log("Email/Username or password is empty.");
-        $error_message = "Email/Username or password is required!";
+        error_log("Email/Username atau password kosong!");
+        $error_message = "Email/Username atau password tidak cocok";
     } else {
         // Query untuk mencocokkan email/username dengan password
         $query = "SELECT user_id, username, email, password FROM users WHERE username = ? OR email = ?";

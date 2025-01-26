@@ -1,4 +1,7 @@
-<?php "koneksi.php"; ?>
+<?php 
+    require "koneksi.php"; 
+    require 'session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,9 +22,17 @@
 
 </head>
 <body>
-    <header class="bg-blue-500 text-orange-500 text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
+    <header class="bg-blue-500 text-white relative flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
         STOK GUDANG
+
+        <button 
+            onclick="window.location.href='logout.php'"
+            class="absolute right-6 bg-orange-500 text-white px-4 py-2 rounded text-[16px] font-medium shadow-md hover:bg-orange-600">
+            Logout
+        </button>
     </header>
+
+
 
     <main class="flex">
         <aside class="w-1/4 bg-white shadow-md p-4">
@@ -53,12 +64,13 @@
                 <table class="w-full border-collapse">
                     <thead class="bg-blue-500 text-white">
                         <tr>
-                            <th class="p-2 text-left">Produk ID</th>
-                            <th class="p-2 text-left">Nama Produk</th>
-                            <th class="p-2 text-left">Harga</th>
-                            <th class="p-2 text-left">Stok</th>
-                            <th class="p-2 text-left">Kategori</th>
-                            <th class="p-2">Opsi</th>
+                            <th class="p-2 text-center">Produk ID</th>
+                            <th class="p-2 text-center">Nama Produk</th>
+                            <th class="p-2 text-center">Harga</th>
+                            <th class="p-2 text-center">Stok</th>
+                            <th class="p-2 text-center">Kategori</th>
+                            <th class="p-2 text-center">Gambar</th>
+                            <th class="p-2 text-center">Opsi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,13 +80,17 @@
                             if ($result->num_rows > 0):
                                 while ($row = $result->fetch_assoc()): ?>
                                     <tr class="border-b">
-                                        <td class="p-2"><?= $row['produk_id']; ?></td>
-                                        <td class="p-2"><?= $row['nama_produk']; ?></td>
-                                        <td class="p-2"><?= number_format($row['harga'], 2); ?></td>
-                                        <td class="p-2"><?= $row['stok']; ?></td>
-                                        <td class="p-2"><?= $row['nama_kategori']; ?></td>
-                                        <td class="p-2">
+                                        <td class="p-2 text-center"><?= $row['produk_id']; ?></td>
+                                        <td class="p-2 text-center"><?= $row['nama_produk']; ?></td>
+                                        <td class="p-2 text-center"><?= number_format($row['harga'], 2); ?></td>
+                                        <td class="p-2 text-center"><?= $row['stok']; ?></td>
+                                        <td class="p-2 text-center"><?= $row['nama']; ?></td>
+                                        <td class="p-2 text-center">
+                                            <img class="mx-auto" src="../img/<?= $row['foto'] ?>" alt="" width="150px">
+                                        </td>
+                                        <td class="p-2 text-center">
                                             <a href="stockview.php?produk_id=<?= $row['produk_id']; ?>" class="bg-blue-500 text-white px-4 py-2 rounded">Lihat Stok</a>
+                                        </td>
                                     </tr>
                                 <?php endwhile;
                             else: ?>
@@ -91,10 +107,10 @@
     <div id="stuff" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white w-1/3 p-6 rounded shadow-lg">
             <h2 class="text-2xl font-bold mb-4">Tambah Barang</h2>
-            <form action="proses_tambah_barang.php" method="POST" enctype="multipart/form-data">
+            <form action="tambah_data.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-4">
-                    <label for="nama_barang" class="block font-semibold mb-2">Nama Barang:</label>
-                    <input type="text" id="nama_barang" name="nama_barang" class="w-full border rounded px-2 py-1" required>
+                    <label for="nama_produk" class="block font-semibold mb-2">Nama Barang:</label>
+                    <input type="text" id="nama_produk" name="nama_produk" class="w-full border rounded px-2 py-1" required>
                 </div>
                 <div class="mb-4">
                     <label for="stok" class="block font-semibold mb-2">Stok:</label>
@@ -108,10 +124,19 @@
                     <label for="kategori" class="block font-semibold mb-2">Kategori:</label>
                     <select id="kategori" name="kategori" class="w-full border rounded px-2 py-1" required>
                         <option value="" disabled selected>Pilih Kategori</option>
-                        <option value="parfum">Parfum</option>
-                        <option value="pengharum">Pengharum Ruangan</option>
-                        <option value="pewarna">Pewarna & Perawatan Rambut</option>
-                        <option value="peralatan rumah tangga">Perawatan Tubuh & Skincare</option>
+                        <?php
+                        // Query untuk mengambil kategori
+                        $query_kategori = "SELECT kategori_id, nama FROM kategori_jenis_barang";
+                        $result_kategori = $con->query($query_kategori);
+
+                        if ($result_kategori->num_rows > 0) {
+                            while ($row = $result_kategori->fetch_assoc()) {
+                                echo "<option value='{$row['kategori_id']}'>{$row['nama']}</option>";
+                            }
+                        } else {
+                            echo "<option value='' disabled>Tidak ada kategori</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="mb-4">
@@ -120,9 +145,10 @@
                 </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="closestuff()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Batal</button>
-                    <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded">Simpan</button>
+                    <button type="submit" onclick="'tambah.php'" class="bg-orange-500 text-white px-4 py-2 rounded" name="simpan">Simpan</button>
                 </div>
             </form>
+            
         </div>
     </div>
 
