@@ -1,5 +1,5 @@
-node_modules
+node_modules/
 img/
-Assets
+Assets/
 package-lock.json
 tailwind.css
