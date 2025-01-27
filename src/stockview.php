@@ -27,7 +27,14 @@ require "datagraph.php"
 </head>
 <body>
     <header class="bg-blue-500 text-white text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
+        <button 
+            onclick="window.location.href='land.php'"
+            class="absolute left-6 bg-orange-500 text-white px-4 py-2 rounded-lg text-[16px] font-medium shadow-md hover:bg-orange-600">
+            kembali
+        </button>
+    
         STOK GUDANG
+
     </header>
 
     <main class="flex">
@@ -43,7 +50,7 @@ require "datagraph.php"
                 <?php
                     if ($produk_id) {
                         // Query untuk mengambil data produk berdasarkan produk_id
-                        $query = "SELECT nama_produk FROM produk WHERE produk_id = ?";
+                        $query = "SELECT nama_produk, foto FROM produk WHERE produk_id = ?";
                         $stmt = $con->prepare($query);
                         $stmt->bind_param('i', $produk_id);
                         $stmt->execute();
@@ -52,6 +59,7 @@ require "datagraph.php"
                         if ($result->num_rows > 0) {
                             $row = $result->fetch_assoc();
                             echo "<h2 class='text-center mb-6'>Stok Barang: " . $row['nama_produk'] . "</h2>";
+                            echo "<img src='../img/" . $row['foto'] . "' alt='Foto Produk' class='mx-auto'>"; // Menampilkan gambar
                         } else {
                             echo "<p>Produk tidak ditemukan.</p>";
                         }

@@ -23,11 +23,11 @@
 </head>
 <body>
     <header class="bg-blue-500 text-white relative flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
-        STOK GUDANG
+        GUDANG KAZUMI
 
         <button 
             onclick="window.location.href='logout.php'"
-            class="absolute right-6 bg-orange-500 text-white px-4 py-2 rounded text-[16px] font-medium shadow-md hover:bg-orange-600">
+            class="absolute right-6 bg-orange-500 text-white px-4 py-2 rounded-lg text-[16px] font-medium shadow-md hover:bg-orange-600">
             Logout
         </button>
     </header>
@@ -45,7 +45,7 @@
                 <label for="search" class="mr-2">Cari:</label>
                 <input type="text" id="search" class="border rounded px-2 py-1" placeholder="Cari produk...">
             </div>
-            <button onclick="openstuff()" class="bg-orange-500 text-white px-4 py-2 rounded w-full font-semibold mb-4">
+            <button onclick="openstuff()" class="bg-orange-500 text-white px-4 py-2 rounded-xl w-full font-semibold mb-4">
                 Tambah Barang
             </button>
 
@@ -82,7 +82,7 @@
                                     <tr class="border-b">
                                         <td class="p-2 text-center"><?= $row['produk_id']; ?></td>
                                         <td class="p-2 text-center"><?= $row['nama_produk']; ?></td>
-                                        <td class="p-2 text-center">Rp.<?= number_format($row['harga'], 2); ?></td>
+                                        <td class="p-2 text-center">Rp. <?= number_format($row['harga'], 2); ?></td>
                                         <td class="p-2 text-center"><?= $row['stok']; ?></td>
                                         <td class="p-2 text-center"><?= $row['nama']; ?></td>
                                         <td class="p-2 text-center">
