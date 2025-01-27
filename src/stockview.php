@@ -1,3 +1,4 @@
+
 <?php 
 require "koneksi.php";
 // Ambil produk_id dari URL
@@ -12,10 +13,18 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
     <title>Kazumi Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="tailwind.css">
+    <script>
+        function openstuff() {
+            document.getElementById("stuff").classList.remove("hidden");
+        }
 
+        function closestuff() {
+            document.getElementById("stuff").classList.add("hidden");
+        }
+    </script>
 </head>
 <body>
-    <header class="bg-blue-500 text-orange-500 text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
+    <header class="bg-blue-500 text-white text-center flex items-center justify-center h-[100px] text-[40px] font-bold shadow-md">
         STOK GUDANG
     </header>
 
@@ -24,10 +33,12 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
             <div class="text-center mb-6">
                 <img src="../Assets/BannerKazumi.png" alt="Kazumi Store" class="w-32 mx-auto">
                 <h2 class="text-lg font-bold mt-2">Kazumi Store</h2>
-                
             </div>
+            <button onclick="openstuff()" class="bg-orange-500 text-white px-4 py-2 rounded w-full font-semibold mb-4">
+                Tambah Stok
+            </button>
             <div class="text-center mb-6">
-                <?php require "koneksi.php";
+                <?php
                     if ($produk_id) {
                         // Query untuk mengambil data produk berdasarkan produk_id
                         $query = "SELECT nama_produk FROM produk WHERE produk_id = ?";
@@ -46,7 +57,6 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
                 ?>
             </div>
             
-
             <!-- <div class="mb-4">
                 <label for="sort" class="block font-semibold mb-2">Sort by:</label>
                 <select id="sort" class="w-full border-gray-300 rounded p-2">
@@ -69,7 +79,7 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
                         </tr>
                     </thead>
                     <tbody>
-                    <?php require "koneksi.php";
+                    <?php
                         $query = "
                             SELECT p.nama_produk, p.stok, l.jumlah, l.jenis, l.tanggal 
                             FROM stok_log l
@@ -103,5 +113,33 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
         </section>
     </main>
 
+    <!-- tambah stok -->
+    <div id="stuff" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white w-1/3 p-6 rounded shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Tambah Stok</h2>
+            <form action="tambah.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="produk_id" value="<?php echo $produk_id; ?>">
+
+                <div class="mb-4">
+                    <label for="stok" class="block font-semibold mb-2">Jumlah Barang:</label>
+                    <input type="number" id="stok" name="stok" class="w-full border rounded px-2 py-1" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="jenis" class="block font-semibold mb-2">Kategori:</label>
+                    <select id="jenis" name="jenis" class="w-full border rounded px-2 py-1" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="masuk">Masuk</option>
+                        <option value="keluar">Keluar</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button type="button" onclick="closestuff()" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Batal</button>
+                    <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded" name="simpan">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <?php require "footer.php" ?>
 </body>

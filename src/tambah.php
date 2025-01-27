@@ -1,45 +1,48 @@
 <?php
 require "koneksi.php"; // Koneksi ke database
 
+// Ambil produk_id dari URL
+$produk_id = isset($_POST['produk_id']) ? intval($_POST['produk_id']) : 0;
+
 // Mengecek apakah form telah dikirim
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_barang = $_POST['nama_barang'];
-    $stok = $_POST['stok'];
-    $harga = $_POST['harga'];
-    $kategori = $_POST['kategori'];
+    // Menyimpan hasil var_dump dalam sebuah variabel
+    ob_start(); // Mulai buffering output
+    var_dump($_POST); // Output var_dump
+    $output = ob_get_clean(); // Menyimpan hasil ke dalam variabel dan membersihkan output buffer
 
-    // Mengunggah file foto
-    $foto = $_FILES['foto'];
-    $foto_nama = $foto['name'];
-    $foto_tmp = $foto['tmp_name'];
-    $foto_folder = "uploads/"; // Folder tempat menyimpan file foto
+    // Menampilkan hasil var_dump di console.log melalui JavaScript
+    echo "<script>console.log(" . json_encode($output) . ");</script>";
 
-    // Membuat folder jika belum ada
-    if (!is_dir($foto_folder)) {
-        mkdir($foto_folder, 0777, true);
-    }
+    // Pastikan semua input diterima dari form
+    $stok = isset($_POST['stok']) ? intval($_POST['stok']) : 0; 
+    $jenis = isset($_POST['jenis']) ? $_POST['jenis'] : '';
 
-    // Menentukan lokasi file tujuan
-    $foto_path = $foto_folder . basename($foto_nama);
+    echo "Produk ID: " . $produk_id . "<br>";
+    echo "Stok: " . $stok . "<br>";
+    echo "Jenis: " . $jenis . "<br>";
 
-    // Memindahkan file yang diunggah ke folder tujuan
-    if (move_uploaded_file($foto_tmp, $foto_path)) {
-        // Query untuk menyimpan data ke database
-        $query = "INSERT INTO produk (nama_produk, stok, harga, kategori_id, foto) VALUES ('$nama_barang', '$stok', '$harga', '$kategori', '$foto_path')";
-        if ($con->query($query) === TRUE) {
+    // Validasi input
+    if ($produk_id > 0 && $stok > 0 && !empty($jenis)) {
+        // Query untuk menyimpan data ke tabel stok_log
+        $query_stok_log = "INSERT INTO stok_log (produk_id, jumlah, jenis, tanggal) VALUES (?, ?, ?, NOW())";
+        $stmt_stok_log = $con->prepare($query_stok_log);
+        $stmt_stok_log->bind_param("iis", $produk_id, $stok, $jenis);
+
+        if ($stmt_stok_log->execute()) {
             echo "<script>
-                alert('Barang berhasil ditambahkan');
-                window.location.href = 'index.html';
+                alert('Log stok berhasil ditambahkan');
+                window.location.href = 'stockview.php?produk_id=" . $produk_id . "';
             </script>";
         } else {
             echo "<script>
-                alert('Gagal menambahkan barang: " . $con->error . "');
+                alert('Gagal menambahkan log stok: " . $stmt_stok_log->error . "');
                 window.history.back();
             </script>";
         }
     } else {
         echo "<script>
-            alert('Gagal mengunggah foto.');
+            alert('Harap isi semua data dengan benar');
             window.history.back();
         </script>";
     }
