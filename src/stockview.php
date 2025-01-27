@@ -31,13 +31,13 @@ require "datagraph.php"
     </header>
 
     <main class="flex">
-        <aside class="w-1/4 bg-white shadow-md p-4">
+        <aside class="w-1/4 h-1/4 bg-white shadow-md p-4">
             <div class="text-center mb-6">
                 <img src="../Assets/BannerKazumi.png" alt="Kazumi Store" class="w-32 mx-auto">
                 <h2 class="text-lg font-bold mt-2">Kazumi Store</h2>
             </div>
             <button onclick="openstuff()" class="bg-orange-500 text-white px-4 py-2 rounded w-full font-semibold mb-4">
-                Tambah Stok
+                Edit Stok
             </button>
             <div class="text-center mb-6">
                 <?php
@@ -68,7 +68,8 @@ require "datagraph.php"
                 </select>
             </div> -->
         </aside>
-
+        
+        <div class="flex-col w-full">
         <section class="flex-1 bg-blue-100 p-6">
             <div class="overflow-x-auto bg-white shadow-md rounded p-4">
                 <table class="w-full border-collapse">
@@ -154,6 +155,8 @@ require "datagraph.php"
                 </script>
             </div>
         </section>
+        </div>
+        
     </main>
 
     <!-- tambah stok -->

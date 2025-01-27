@@ -82,7 +82,7 @@
                                     <tr class="border-b">
                                         <td class="p-2 text-center"><?= $row['produk_id']; ?></td>
                                         <td class="p-2 text-center"><?= $row['nama_produk']; ?></td>
-                                        <td class="p-2 text-center"><?= number_format($row['harga'], 2); ?></td>
+                                        <td class="p-2 text-center">Rp.<?= number_format($row['harga'], 2); ?></td>
                                         <td class="p-2 text-center"><?= $row['stok']; ?></td>
                                         <td class="p-2 text-center"><?= $row['nama']; ?></td>
                                         <td class="p-2 text-center">
