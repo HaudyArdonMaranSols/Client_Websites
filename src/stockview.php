@@ -3,6 +3,7 @@
 require "koneksi.php";
 // Ambil produk_id dari URL
 $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
+require "datagraph.php"
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +14,7 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
     <title>Kazumi Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="tailwind.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function openstuff() {
             document.getElementById("stuff").classList.remove("hidden");
@@ -109,6 +111,47 @@ $produk_id = isset($_GET['produk_id']) ? $_GET['produk_id'] : '';
                         <?php endif; ?>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <section class="flex-1 bg-blue-100 p-6">
+            <div class="mt-8">
+                <canvas id="stokChart" width="400" height="200"></canvas>
+
+                <script>
+                    const ctx = document.getElementById('stokChart').getContext('2d');
+                    const stokChart = new Chart(ctx, {
+                        type: 'line', // Jenis grafik: bisa bar, line, dll.
+                        data: {
+                            labels: <?php echo json_encode($dates); ?>, // Label untuk sumbu X
+                            datasets: [
+                                {
+                                    label: 'Stok Masuk',
+                                    data: <?php echo json_encode($stok_masuk); ?>, // Data untuk stok masuk
+                                    borderColor: 'rgba(0, 123, 255, 1)', // Warna garis
+                                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                                    fill: true
+                                },
+                                {
+                                    label: 'Stok Keluar',
+                                    data: <?php echo json_encode($stok_keluar); ?>, // Data untuk stok keluar
+                                    borderColor: 'rgba(220, 53, 69, 1)', // Warna garis
+                                    backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                                    fill: true
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Perubahan Stok Barang'
+                                }
+                            }
+                        }
+                    });
+                </script>
             </div>
         </section>
     </main>
